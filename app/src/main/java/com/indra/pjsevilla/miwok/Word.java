@@ -6,14 +6,15 @@ package com.indra.pjsevilla.miwok;
 
 public class Word {
 
+    private static final int NO_IMAGE_PROVIDED = -1;
     private String mDefaultTranslation;
     private String mMiwokTranslation;
-    private int mImageId;
+    private int mImageId = NO_IMAGE_PROVIDED;
+
 
     public Word(String defaultWord, String miwokWord) {
         mDefaultTranslation = defaultWord;
         mMiwokTranslation = miwokWord;
-        mImageId = R.drawable.color_dusty_yellow;
     }
 
     public Word(String defaultWord, String miwokWord, int imageId) {
@@ -30,7 +31,11 @@ public class Word {
         return mMiwokTranslation;
     }
 
-    public int getImageId () {
+    public int getImageId() {
         return mImageId;
+    }
+
+    public boolean hasImage() {
+        return (mImageId != NO_IMAGE_PROVIDED);
     }
 }

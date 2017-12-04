@@ -35,7 +35,12 @@ public class WordAdapter extends ArrayAdapter<Word> {
         Word currentWord = getItem(position);
 
         ImageView imageView = listItemView.findViewById(R.id.image);
-        imageView.setImageDrawable(currentWord.getImageId());
+        if (currentWord.hasImage()) {
+            imageView.setVisibility(View.GONE);
+        } else {
+            imageView.setImageResource(currentWord.getImageId());
+            imageView.setVisibility(View.VISIBLE);
+        }
 
         // Find the TextView in the list_item.xml layout with the ID version_name
         TextView miwokTextView = listItemView.findViewById(R.id.miwok_word);
