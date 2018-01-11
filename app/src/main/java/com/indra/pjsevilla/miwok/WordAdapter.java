@@ -3,11 +3,13 @@ package com.indra.pjsevilla.miwok;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -18,8 +20,11 @@ import java.util.List;
 
 public class WordAdapter extends ArrayAdapter<Word> {
 
-    public WordAdapter(@NonNull Context context, @NonNull List<Word> objects) {
+    private int mColorResourceId;
+
+    public WordAdapter(@NonNull Context context, @NonNull List<Word> objects, int colorResourceId) {
         super(context, 0, objects);
+        mColorResourceId = colorResourceId;
     }
 
     @NonNull
@@ -36,11 +41,16 @@ public class WordAdapter extends ArrayAdapter<Word> {
 
         ImageView imageView = listItemView.findViewById(R.id.image);
         if (currentWord.hasImage()) {
-            imageView.setVisibility(View.GONE);
-        } else {
             imageView.setImageResource(currentWord.getImageId());
             imageView.setVisibility(View.VISIBLE);
+
+        } else {
+            imageView.setVisibility(View.GONE);
         }
+
+        LinearLayout linearLayout = listItemView.findViewById(R.id.text_container);
+        int color = ContextCompat.getColor(getContext(), mColorResourceId);
+        linearLayout.setBackgroundColor(color);
 
         // Find the TextView in the list_item.xml layout with the ID version_name
         TextView miwokTextView = listItemView.findViewById(R.id.miwok_word);
