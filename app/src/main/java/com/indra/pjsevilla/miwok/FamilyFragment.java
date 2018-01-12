@@ -1,17 +1,23 @@
 package com.indra.pjsevilla.miwok;
 
+
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
 
-public class FamilyActivity extends AppCompatActivity {
+/**
+ * A simple {@link Fragment} subclass.
+ */
+public class FamilyFragment extends Fragment {
 
     public WordAdapter mWordAdapter;
     private MediaPlayer mMediaPlayer;
@@ -38,10 +44,15 @@ public class FamilyActivity extends AppCompatActivity {
         }
     };
 
+    public FamilyFragment() {
+        // Required empty public constructor
+    }
+
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_list);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.activity_list, container, false);
 
         ArrayList<Word> words = new ArrayList<>();
         words.add(new Word("father", "әpә", R.raw.family_father, R.drawable.family_father));
@@ -55,13 +66,13 @@ public class FamilyActivity extends AppCompatActivity {
         words.add(new Word("grandmother ", "ama", R.raw.family_grandmother, R.drawable.family_grandmother));
         words.add(new Word("grandfather", "paapa", R.raw.family_grandfather, R.drawable.family_grandfather));
 
-        mWordAdapter = new WordAdapter(this, words, R.color.category_family);
+        mWordAdapter = new WordAdapter(getActivity(), words, R.color.category_family);
 
         releaseMediaPlayer();
 
-        mAudioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        mAudioManager = (AudioManager) getActivity().getSystemService(Context.AUDIO_SERVICE);
 
-        ListView listView = findViewById(R.id.list);
+        ListView listView = rootView.findViewById(R.id.list);
         listView.setAdapter(mWordAdapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -73,16 +84,18 @@ public class FamilyActivity extends AppCompatActivity {
                         AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
 
                 if (result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED) {
-                    mMediaPlayer = MediaPlayer.create(FamilyActivity.this, mWordAdapter.getItem(position).getAudioId());
+                    mMediaPlayer = MediaPlayer.create(getActivity(), mWordAdapter.getItem(position).getAudioId());
                     mMediaPlayer.start();
                     mMediaPlayer.setOnCompletionListener(mCompletionListener);
                 }
             }
         });
+
+        return rootView;
     }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         super.onStop();
         releaseMediaPlayer();
     }
